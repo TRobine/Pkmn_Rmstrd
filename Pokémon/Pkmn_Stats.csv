@@ -1,4 +1,4 @@
-Indice,Numero,Nom,PV,Attaque,Defense,AttSpe,DefSpe,Vitesse,Total,Moyenne
+Code,Numero,Nom,PV,Att,Def,AS,DS,Vit,Total,Moyenne
 1,1,Bulbizarre,45,49,49,65,65,45,318,53
 2,2,Herbizarre,60,62,63,80,80,60,405,67.5
 3,3,Florizarre,80,82,83,100,100,80,525,87.5
