@@ -4,8 +4,13 @@ This package provides functionality for our pokemon role playing game.
 
 ## Installing
 
-The `omc3` package is `Python 3.6+` compatible, but not yet deployed to PyPI.
-The best way to install is though pip and VCS:
+The `omc3` package is `Python 3.6+` compatible.
+The best way to install is though pip:
+```bash
+pip install pokejdr
+```
+
+One can also install from source through VCS:
 ```bash
 git clone https://github.com/TRobine/Pkmn_Rmstrd.git
 cd Pkmn_Rmstrd
