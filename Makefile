@@ -29,7 +29,7 @@ clean:
 	@echo "Cleaning up distutils remains."
 	@rm -rf build
 	@rm -rf dist
-	@rm -rf pyhdtoolkit.egg-info
+	@rm -rf pokejdr.egg-info
 	@rm -rf .eggs
 	@echo "Cleaning up bitecode files and python cache."
 	@find . -type f -name '*.py[co]' -delete -o -type d -name __pycache__ -delete
