@@ -4,7 +4,7 @@ This package provides functionality for our pokemon role playing game.
 
 ## Installing
 
-The `omc3` package is `Python 3.6+` compatible.
+The `pokejdr` package is `Python 3.6+` compatible.
 The best way to install is though pip:
 ```bash
 pip install pokejdr
