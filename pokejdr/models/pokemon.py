@@ -12,58 +12,16 @@ from pydantic import BaseModel, PositiveInt, validator
 
 from pokejdr.base_stats import NATURES_DF, POKEMONS_DF
 from pokejdr.constants import LOGURU_FORMAT
+from pokejdr.models.base import Element
+from pokejdr.models.utils import dealt_damage
 
-logger.remove(0)
 logger.add(sys.stderr, format=LOGURU_FORMAT)
 
 
 # ----- Models ----- #
 
 
-class Pokemon(BaseModel):
-    code: PositiveInt
-    number: PositiveInt
-    name: str
-    level: Optional[PositiveInt]
-    health: int
-    attack: int
-    defense: int
-    special_attack: int
-    special_defense: int
-    speed: int
-    nature: Optional[str]
-    iv: Optional[List[int]] = [0, 0, 0, 0, 0, 0]
-    ev: Optional[List[int]] = [0, 0, 0, 0, 0, 0]
-    accuracy: float = 1.0
-    dodge: float = 1.0
-    base_xp: Optional[int] = 0
-    base_ev: Optional[List[int]] = [0, 0, 0, 0, 0, 0]
-
-    @validator("health")
-    def doesnt_drop_below_0(cls, v) -> int:
-        """
-        Custom validation rule for a Pokemon's health, ensuring the value does not drop below 0.
-        If it does, then log that the pokemon has fainted and set health value to 0.
-        """
-        if v < 0:
-            logger.critical("HP have dropped below 0, pokemon has fainted!")
-            logger.trace("Setting HP to 0 now")
-            return 0
-        return int(v)
-
-    class Config:
-        validate_assignment = True  # force custom validation rules on assignments
-
-    @property
-    def total(self) -> int:
-        return (
-            self.health
-            + self.attack
-            + self.defense
-            + self.special_attack
-            + self.special_defense
-            + self.speed
-        )
+class Pokemon(Element):
 
     # ----- Experience Functionality ----- #
 
@@ -357,60 +315,6 @@ class Pokemon(BaseModel):
 # ----- Public Helpers ----- #
 
 
-def dealt_damage(
-    attacker: Pokemon,
-    defender: Pokemon,
-    attack_type: str,
-    attack_power: float,
-    attack_modifier: float = 1,
-    defense_modifier: float = 1,
-    global_modifier: float = 1,
-) -> float:
-    """
-    Calculates the damage dealt by a pokemon to another one.
-
-    Args:
-        attacker (Pokemon): Pokemon object of the pokemon attacking.
-        defender (Pokemon): Pokemon object of the pokemon getting damaged.
-        attack_type (str): either 'normal' / 'physical' or 'special' / 'spe'.
-        attack_power (float): determined by the attack move used.
-        attack_modifier (float): modifier of the attacker's attack, depending on effects
-            currently on the pokemon (from objects, previous moves etc). Defaults to 1,
-            aka no modification.
-        defense_modifier (float): modifier of the defender's defense, depending on effects
-            currently on the pokemon (from objects, previous moves etc). Defaults to 1,
-            aka no modification.
-        global_modifier (float): input by GM, really weird calculation. Defaults to 1,
-            aka no modification.
-
-    Returns:
-                The damage dealt by the attack.
-    """
-    _assert_valid_attack_type(attack_type)
-    randomness_factor = uniform(0.85, 1)
-
-    attack_value = attack_modifier * (
-        attacker.attack
-        if attack_type.lower() in ("normal", "physical")
-        else attacker.special_attack
-    )
-    defense_value = defense_modifier * (
-        defender.defense
-        if attack_type.lower() in ("normal", "physical")
-        else defender.special_defense
-    )
-    damage = (
-        (2 + (attacker.level * 0.4 + 2) * attack_value * attack_power / defense_value / 50)
-        * global_modifier
-        * randomness_factor
-    )
-    logger.info(
-        f"{attacker.name} performs a {attack_type} attack on {defender.name} that deals "
-        f"{round(damage)} damage"
-    )
-    return round(damage)
-
-
 def erratic_leveling(target_level: int) -> int:
     """
     Non-trivial calculation of experience to next level for an erratic leveling curve.
@@ -511,19 +415,6 @@ def _assert_valid_leveling_cruve(curve_name: str) -> None:
     if curve_name.lower() not in [e.lower() for e in LEVELING_CURVES.keys()]:
         logger.error(f"An invalid leveling curve was provided: '{curve_name}'")
         raise ValueError("Invalid leveling curve.")
-
-
-def _assert_valid_attack_type(type_name: str) -> None:
-    """
-    Ensure the given attack type is valid, log then raise ValueError if not.
-
-    Args:
-        type_name (str): type of attack used, which should be normal or special.
-    """
-    logger.trace("Checking provided attack type validity")
-    if type_name.lower() not in ("normal", "physical", "special", "spe"):
-        logger.error(f"An invalid attack type was provided: '{type_name}'")
-        raise ValueError("Invalid attack type.")
 
 
 def _get_random_pokemon_name() -> str:

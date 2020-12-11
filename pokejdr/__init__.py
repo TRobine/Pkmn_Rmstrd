@@ -1,2 +1,3 @@
 from ._version import __version__
-from .model import Pokemon
+
+# from .models import Pokemon

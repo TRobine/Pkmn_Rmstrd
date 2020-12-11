@@ -5,7 +5,8 @@ import pytest
 from pydantic import ValidationError
 
 from pokejdr import base_stats
-from pokejdr.model import Pokemon, dealt_damage, erratic_leveling, fluctuating_leveling
+from pokejdr.models.pokemon import Pokemon, erratic_leveling, fluctuating_leveling
+from pokejdr.models.utils import dealt_damage
 
 CURRENT_DIR = pathlib.Path(__file__).parent
 
