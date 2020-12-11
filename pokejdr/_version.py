@@ -1,7 +1,7 @@
 __title__ = "pokejdr"
 __description__ = "Un package utilitaire pour notre JDR pokemon."
 __url__ = "https://github.com/TRobine/Pkmn_Rmstrd"
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "T. Robine & F. Soubelet"
 __author_email__ = ""
 __license__ = "MIT"
