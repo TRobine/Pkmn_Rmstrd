@@ -397,7 +397,7 @@ class TestCombat:
             for _ in range(2):
                 initial_health = _defender_pokemon.health
                 _attacker_pokemon.perform_physical_attack(
-                    target_pokemon=_defender_pokemon, attack_power=15
+                    target_element=_defender_pokemon, attack_power=15
                 )
                 assert _defender_pokemon.health != initial_health  # target health should be updated
 
@@ -412,7 +412,7 @@ class TestCombat:
             for _ in range(2):
                 initial_health = _defender_pokemon.health
                 _attacker_pokemon.perform_special_attack(
-                    target_pokemon=_defender_pokemon, attack_power=15
+                    target_element=_defender_pokemon, attack_power=15
                 )
                 assert _defender_pokemon.health != initial_health  # target health should be updated
 

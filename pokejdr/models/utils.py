@@ -4,14 +4,13 @@ from random import uniform
 from loguru import logger
 
 from pokejdr.constants import LOGURU_FORMAT
-from pokejdr.models.base import Element
 
 logger.add(sys.stderr, format=LOGURU_FORMAT)
 
 
 def dealt_damage(
-    attacker: Element,
-    defender: Element,
+    attacker,
+    defender,
     attack_type: str,
     attack_power: float,
     attack_modifier: float = 1,
@@ -37,7 +36,7 @@ def dealt_damage(
             aka no modification.
 
     Returns:
-                The damage dealt by the attack.
+        The damage dealt by the attack.
     """
     _assert_valid_attack_type(attack_type)
     randomness_factor = uniform(0.85, 1)
